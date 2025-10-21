@@ -10,8 +10,8 @@ edition = "2021"
 
 [dependencies]
 argh = "0.1"
-indicatif = "0.16"
-console = "0.15"
+indicatif = "0.16" 
+console = { version = "0.16", feature = ["std"] }
 notify = "4.0"
 toml = "0.5"
 regex = "1.5"
