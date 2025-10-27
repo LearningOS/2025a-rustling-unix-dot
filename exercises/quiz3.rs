@@ -18,16 +18,22 @@
 
 // I AM NOT DONE
 
-pub struct ReportCard {
-    pub grade: f32,
+use std::fmt::Display;
+
+// 定义泛型结构体 ReportCard，GradeType 需实现 Display trait 以支持打印
+pub struct ReportCard<GradeType: Display> {
+    pub grade: GradeType,
     pub student_name: String,
     pub student_age: u8,
 }
 
-impl ReportCard {
+impl<GradeType: Display> ReportCard<GradeType> {
+    // 打印成绩单，利用 Display  trait 格式化不同类型的成绩
     pub fn print(&self) -> String {
-        format!("{} ({}) - achieved a grade of {}",
-            &self.student_name, &self.student_age, &self.grade)
+        format!(
+            "{} ({}) - achieved a grade of {}",
+            &self.student_name, &self.student_age, &self.grade
+        )
     }
 }
 
@@ -37,6 +43,7 @@ mod tests {
 
     #[test]
     fn generate_numeric_report_card() {
+        // 数值型成绩（f32 类型，自动满足 Display 约束）
         let report_card = ReportCard {
             grade: 2.1,
             student_name: "Tom Wriggle".to_string(),
@@ -50,9 +57,9 @@ mod tests {
 
     #[test]
     fn generate_alphabetic_report_card() {
-        // TODO: Make sure to change the grade here after you finish the exercise.
+        // 字母型成绩（String 类型，满足 Display 约束）
         let report_card = ReportCard {
-            grade: 2.1,
+            grade: "A+".to_string(), // 改为字母等级
             student_name: "Gary Plotter".to_string(),
             student_age: 11,
         };
