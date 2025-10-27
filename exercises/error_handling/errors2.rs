@@ -26,10 +26,10 @@ use std::num::ParseIntError;
 pub fn total_cost(item_quantity: &str) -> Result<i32, ParseIntError> {
     let processing_fee = 1;
     let cost_per_item = 5;
-    // 解析字符串为整数，若失败则直接返回错误
-    let qty = item_quantity.parse()?;
+    // 显式指定解析为i32类型，?运算符处理解析错误
+    let qty = item_quantity.parse::<i32>()?;
 
-    // 计算总费用：物品数量×单价 + 手续费
+    // 计算总费用：数量×单价 + 手续费，用Ok包裹成功结果
     Ok(qty * cost_per_item + processing_fee)
 }
 
@@ -39,11 +39,13 @@ mod tests {
 
     #[test]
     fn item_quantity_is_a_valid_number() {
+        // 34 × 5 + 1 = 171，断言匹配成功结果
         assert_eq!(total_cost("34"), Ok(171));
     }
 
     #[test]
     fn item_quantity_is_an_invalid_number() {
+        // 解析"beep boop"失败，断言错误信息匹配
         assert_eq!(
             total_cost("beep boop").unwrap_err().to_string(),
             "invalid digit found in string"
