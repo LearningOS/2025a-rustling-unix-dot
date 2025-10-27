@@ -23,39 +23,50 @@
 // I AM NOT DONE
 
 pub enum Command {
-    Uppercase,
-    Trim,
-    Append(usize),
+    Uppercase,  // 大写转换命令
+    Trim,       // 去除空格命令
+    Append(usize),  // 追加命令，携带追加次数
 }
 
 mod my_module {
-    use super::Command;
+    use super::Command;  // 引入父模块的Command枚举
 
-    // TODO: Complete the function signature!
-    pub fn transformer(input: ???) -> ??? {
-        // TODO: Complete the output declaration!
-        let mut output: ??? = vec![];
-        for (string, command) in input.iter() {
-            // TODO: Complete the function body. You can do it!
+    // 函数签名：输入是(String, Command)元组的向量，输出是String的向量
+    pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
+        let mut output: Vec<String> = vec![];  // 初始化输出向量
+        for (string, command) in input {  // 遍历输入的每个元组
+            match command {  // 根据命令类型匹配处理逻辑
+                // 1. 处理大写命令：调用String的to_uppercase()方法
+                Command::Uppercase => output.push(string.to_uppercase()),
+                // 2. 处理去除空格命令：先trim()去空格，再转成String（trim()返回&str）
+                Command::Trim => output.push(string.trim().to_string()),
+                // 3. 处理追加命令：先重复"bar"n次，再和原字符串拼接
+                Command::Append(n) => {
+                    let bar_repeated = "bar".repeat(n);  // 生成重复n次的"bar"
+                    output.push(format!("{}{}", string, bar_repeated));  // 拼接并加入输出
+                }
+            }
         }
-        output
+        output  // 返回处理后的字符串向量
     }
 }
 
 #[cfg(test)]
 mod tests {
-    // TODO: What do we need to import to have `transformer` in scope?
-    use ???;
+    // 导入my_module中的transformer函数，以及父模块的Command枚举
+    use super::my_module::transformer;
     use super::Command;
 
     #[test]
     fn it_works() {
+        // 构造测试输入：每个元组是（原始字符串，命令）
         let output = transformer(vec![
-            ("hello".into(), Command::Uppercase),
-            (" all roads lead to rome! ".into(), Command::Trim),
-            ("foo".into(), Command::Append(1)),
-            ("bar".into(), Command::Append(5)),
+            ("hello".into(), Command::Uppercase),  // 测试大写：hello → HELLO
+            (" all roads lead to rome! ".into(), Command::Trim),  // 测试去空格：前后空格去除
+            ("foo".into(), Command::Append(1)),  // 测试追加1次：foo → foobar
+            ("bar".into(), Command::Append(5)),  // 测试追加5次：bar + 5个bar → 共6个bar
         ]);
+        // 验证每个输出是否符合预期
         assert_eq!(output[0], "HELLO");
         assert_eq!(output[1], "all roads lead to rome!");
         assert_eq!(output[2], "foobar");
