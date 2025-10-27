@@ -13,7 +13,7 @@
 
 use std::num::ParseIntError;
 
-// This is a custom error type that we will be using in `parse_pos_nonzero()`.
+// 自定义错误类型，包裹两种可能的错误：创建错误和解析错误
 #[derive(PartialEq, Debug)]
 enum ParsePosNonzeroError {
     Creation(CreationError),
@@ -21,22 +21,26 @@ enum ParsePosNonzeroError {
 }
 
 impl ParsePosNonzeroError {
+    // 从 CreationError 转换为自定义错误
     fn from_creation(err: CreationError) -> ParsePosNonzeroError {
         ParsePosNonzeroError::Creation(err)
     }
-    // TODO: add another error conversion function here.
-    // fn from_parseint...
+
+    // TODO：补充从 ParseIntError 转换为自定义错误的函数
+    fn from_parseint(err: ParseIntError) -> ParsePosNonzeroError {
+        ParsePosNonzeroError::ParseInt(err)
+    }
 }
 
+// 解析字符串为 PositiveNonzeroInteger，错误统一返回自定义错误类型
 fn parse_pos_nonzero(s: &str) -> Result<PositiveNonzeroInteger, ParsePosNonzeroError> {
-    // TODO: change this to return an appropriate error instead of panicking
-    // when `parse()` returns an error.
-    let x: i64 = s.parse().unwrap();
+    // TODO：用 map_err 处理 parse 可能返回的 ParseIntError，避免 unwrap
+    let x: i64 = s.parse().map_err(ParsePosNonzeroError::from_parseint)?;
+    // 处理创建 PositiveNonzeroInteger 时的错误
     PositiveNonzeroInteger::new(x).map_err(ParsePosNonzeroError::from_creation)
 }
 
-// Don't change anything below this line.
-
+// 以下代码无需修改
 #[derive(PartialEq, Debug)]
 struct PositiveNonzeroInteger(u64);
 
@@ -62,7 +66,6 @@ mod test {
 
     #[test]
     fn test_parse_error() {
-        // We can't construct a ParseIntError, so we have to pattern match.
         assert!(matches!(
             parse_pos_nonzero("not a number"),
             Err(ParsePosNonzeroError::ParseInt(_))
