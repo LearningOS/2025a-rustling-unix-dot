@@ -26,8 +26,10 @@ use std::num::ParseIntError;
 pub fn total_cost(item_quantity: &str) -> Result<i32, ParseIntError> {
     let processing_fee = 1;
     let cost_per_item = 5;
-    let qty = item_quantity.parse::<i32>();
+    // 解析字符串为整数，若失败则直接返回错误
+    let qty = item_quantity.parse()?;
 
+    // 计算总费用：物品数量×单价 + 手续费
     Ok(qty * cost_per_item + processing_fee)
 }
 
