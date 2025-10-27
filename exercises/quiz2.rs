@@ -22,7 +22,7 @@
 
 // I AM NOT DONE
 
-pub enum Command {
+ pub enum Command {
     Uppercase,  // 大写转换命令
     Trim,       // 去除空格命令
     Append(usize),  // 追加命令，携带追加次数
