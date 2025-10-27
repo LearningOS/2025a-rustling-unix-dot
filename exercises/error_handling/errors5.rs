@@ -28,16 +28,15 @@ use std::error;
 use std::fmt;
 use std::num::ParseIntError;
 
-// TODO: update the return type of `main()` to make this compile.
-fn main() -> Result<(), Box<dyn ???>> {
+// 将返回类型改为 Box<dyn error::Error>，因为它是所有错误的共同 trait
+fn main() -> Result<(), Box<dyn error::Error>> {
     let pretend_user_input = "42";
     let x: i64 = pretend_user_input.parse()?;
     println!("output={:?}", PositiveNonzeroInteger::new(x)?);
     Ok(())
 }
 
-// Don't change anything below this line.
-
+// 以下代码无需修改
 #[derive(PartialEq, Debug)]
 struct PositiveNonzeroInteger(u64);
 
@@ -57,7 +56,6 @@ impl PositiveNonzeroInteger {
     }
 }
 
-// This is required so that `CreationError` can implement `error::Error`.
 impl fmt::Display for CreationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let description = match *self {
