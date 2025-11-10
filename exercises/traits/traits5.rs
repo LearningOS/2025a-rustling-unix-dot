@@ -29,8 +29,8 @@ impl OtherTrait for SomeStruct {}
 impl SomeTrait for OtherStruct {}
 impl OtherTrait for OtherStruct {}
 
-// YOU MAY ONLY CHANGE THE NEXT LINE
-fn some_func(item: ??) -> bool {
+// 限定参数需同时实现 SomeTrait 和 OtherTrait
+fn some_func(item: impl SomeTrait + OtherTrait) -> bool {
     item.some_function() && item.other_function()
 }
 
