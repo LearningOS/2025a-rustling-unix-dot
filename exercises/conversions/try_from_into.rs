@@ -18,60 +18,70 @@ struct Color {
     blue: u8,
 }
 
-// We will use this error type for these `TryFrom` conversions.
 #[derive(Debug, PartialEq)]
 enum IntoColorError {
-    // Incorrect length of slice
     BadLen,
-    // Integer conversion error
     IntConversion,
 }
 
-// I AM NOT DONE
+// 辅助函数：将 i16 转换为 u8，确保在 0..=255 范围内
+fn convert_component(value: i16) -> Result<u8, IntoColorError> {
+    if value >= 0 && value <= 255 {
+        Ok(value as u8)
+    } else {
+        Err(IntoColorError::IntConversion)
+    }
+}
 
-// Your task is to complete this implementation and return an Ok result of inner
-// type Color. You need to create an implementation for a tuple of three
-// integers, an array of three integers, and a slice of integers.
-//
-// Note that the implementation for tuple and array will be checked at compile
-// time, but the slice implementation needs to check the slice length! Also note
-// that correct RGB color values must be integers in the 0..=255 range.
-
-// Tuple implementation
+// 从元组 (i16, i16, i16) 转换
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let red = convert_component(tuple.0)?;
+        let green = convert_component(tuple.1)?;
+        let blue = convert_component(tuple.2)?;
+        Ok(Color { red, green, blue })
     }
 }
 
-// Array implementation
+// 从数组 [i16; 3] 转换
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let red = convert_component(arr[0])?;
+        let green = convert_component(arr[1])?;
+        let blue = convert_component(arr[2])?;
+        Ok(Color { red, green, blue })
     }
 }
 
-// Slice implementation
+// 从切片 &[i16] 转换
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        // 检查切片长度是否为 3
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        }
+        // 转换每个分量
+        let red = convert_component(slice[0])?;
+        let green = convert_component(slice[1])?;
+        let blue = convert_component(slice[2])?;
+        Ok(Color { red, green, blue })
     }
 }
 
 fn main() {
-    // Use the `try_from` function
     let c1 = Color::try_from((183, 65, 14));
     println!("{:?}", c1);
 
-    // Since TryFrom is implemented for Color, we should be able to use TryInto
     let c2: Result<Color, _> = [183, 65, 14].try_into();
     println!("{:?}", c2);
 
     let v = vec![183, 65, 14];
-    // With slice we should use `try_from` function
     let c3 = Color::try_from(&v[..]);
     println!("{:?}", c3);
-    // or take slice within round brackets and use TryInto
+
     let c4: Result<Color, _> = (&v[..]).try_into();
     println!("{:?}", c4);
 }
