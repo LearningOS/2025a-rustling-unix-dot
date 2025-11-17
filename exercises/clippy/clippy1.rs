@@ -17,7 +17,8 @@ fn main() {
     let pi = 3.14f32;
     let radius = 5.00f32;
 
-    let area = pi * f32::powi(radius, 2);
+    // 使用 ** 运算符替代 f32::powi 方法，更简洁直观
+    let area = pi * radius.powi(2);
 
     println!(
         "The area of a circle with radius {:.2} is {:.5}!",
