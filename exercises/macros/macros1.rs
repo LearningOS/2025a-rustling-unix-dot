@@ -12,5 +12,6 @@ macro_rules! my_macro {
 }
 
 fn main() {
-    my_macro();
+    my_macro!(); // 在宏名称后添加!以正确调用宏
 }
+
