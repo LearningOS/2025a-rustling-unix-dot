@@ -29,8 +29,8 @@ use std::f32::consts::PI;
 fn main() {
     let radius = 5.00f32;
 
-    // 使用标准库提供的精确 PI 常量，并用 ** 运算符简化平方计算
-    let area = PI * radius **2.0;
+    // 使用标准库的 PI 常量，并用 powi(2) 计算平方
+    let area = PI * radius.powi(2);
 
     println!(
         "The area of a circle with radius {:.2} is {:.5}!",
