@@ -26,7 +26,10 @@ fn main() {
 
     let mut results: Vec<u128> = vec![];
     for handle in handles {
-        // TODO: a struct is returned from thread::spawn, can you use it?
+        // 使用 join 方法等待线程完成并获取返回值
+        // unwrap 用于处理 Result，这里假设线程不会 panic
+        let result = handle.join().unwrap();
+        results.push(result);
     }
 
     if results.len() != 10 {
