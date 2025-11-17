@@ -22,7 +22,8 @@
 
 #[derive(PartialEq, Debug)]
 pub enum List {
-    Cons(i32, List),
+    // 用 Box 包装 List，将递归类型转为固定大小的指针
+    Cons(i32, Box<List>),
     Nil,
 }
 
@@ -35,11 +36,13 @@ fn main() {
 }
 
 pub fn create_empty_list() -> List {
-    todo!()
+    // 空列表直接返回 Nil 变体
+    List::Nil
 }
 
 pub fn create_non_empty_list() -> List {
-    todo!()
+    // 非空列表：嵌套 Cons 结构，最后用 Box::new(Nil) 终止递归
+    List::Cons(1, Box::new(List::Cons(2, Box::new(List::Nil))))
 }
 
 #[cfg(test)]
