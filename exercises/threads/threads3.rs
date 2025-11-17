@@ -13,7 +13,6 @@
 // I AM NOT DONE
 
 use std::sync::mpsc;
-use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 
@@ -34,22 +33,23 @@ impl Queue {
 }
 
 fn send_tx(q: Queue, tx: mpsc::Sender<u32>) -> () {
-    let qc = Arc::new(q);
-    let qc1 = Arc::clone(&qc);
-    let qc2 = Arc::clone(&qc);
+    // 克隆 Sender 用于第二个线程
+    let tx2 = tx.clone();
 
+    // 第一个线程使用原始 tx 发送 first_half
     thread::spawn(move || {
-        for val in &qc1.first_half {
+        for val in q.first_half {
             println!("sending {:?}", val);
-            tx.send(*val).unwrap();
+            tx.send(val).unwrap();
             thread::sleep(Duration::from_secs(1));
         }
     });
 
+    // 第二个线程使用克隆的 tx2 发送 second_half
     thread::spawn(move || {
-        for val in &qc2.second_half {
+        for val in q.second_half {
             println!("sending {:?}", val);
-            tx.send(*val).unwrap();
+            tx2.send(val).unwrap();
             thread::sleep(Duration::from_secs(1));
         }
     });
@@ -63,9 +63,13 @@ fn main() {
     send_tx(queue, tx);
 
     let mut total_received: u32 = 0;
+    // 接收所有数据直到达到预期长度
     for received in rx {
         println!("Got: {}", received);
         total_received += 1;
+        if total_received == queue_length {
+            break;
+        }
     }
 
     println!("total numbers received: {}", total_received);
