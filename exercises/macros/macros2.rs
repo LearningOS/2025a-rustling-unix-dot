@@ -5,12 +5,14 @@
 
 // I AM NOT DONE
 
-fn main() {
-    my_macro!();
-}
-
+// 先定义宏
 macro_rules! my_macro {
     () => {
         println!("Check out my macro!");
     };
+}
+
+fn main() {
+    // 后使用宏
+    my_macro!();
 }
