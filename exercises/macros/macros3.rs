@@ -7,6 +7,8 @@
 
 // I AM NOT DONE
 
+// 使用 #[macro_use] 导出模块内的宏，使其在外部可调用
+#[macro_use]
 mod macros {
     macro_rules! my_macro {
         () => {
@@ -18,3 +20,4 @@ mod macros {
 fn main() {
     my_macro!();
 }
+
