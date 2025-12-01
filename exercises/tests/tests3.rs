@@ -19,11 +19,20 @@ mod tests {
 
     #[test]
     fn is_true_when_even() {
-        assert!();
+        // 测试偶数：调用 is_even 传入偶数（如 2、4、6 等），结果应为 true
+        assert!(is_even(2));
+        // 可选：多测试几个偶数，覆盖更多场景
+        // assert!(is_even(4));
+        // assert!(is_even(0)); // 0 是偶数，也应返回 true
     }
 
     #[test]
     fn is_false_when_odd() {
-        assert!();
+        // 测试奇数：调用 is_even(5)，结果应为 false，用 assert! 需取反
+        assert!(!is_even(5));
+        // 可选：多测试几个奇数，覆盖更多场景
+        // assert!(!is_even(3));
+        // assert!(!is_even(-1)); // 负数奇数也应返回 false
     }
 }
+
