@@ -7,11 +7,14 @@
 // hint.
 
 // I AM NOT DONE
-
 #[cfg(test)]
 mod tests {
     #[test]
     fn you_can_assert_eq() {
-        assert_eq!();
+        // 两个相等的可比较值，断言成功，测试通过
+        assert_eq!(42, 42);
+        // 也可以用其他类型（如字符串、布尔值），只要满足 PartialEq 特质
+        // assert_eq!("hello", "hello");
+        // assert_eq!(true, !false);
     }
 }
