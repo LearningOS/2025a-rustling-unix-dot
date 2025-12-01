@@ -27,12 +27,15 @@
 /// # Safety
 ///
 /// The `address` must contain a mutable reference to a valid `u32` value.
+/// （安全契约：传入的 `address` 必须是一个指向有效 `u32` 值的可变内存地址，且调用者需保证该地址的独占访问权，避免数据竞争）
 unsafe fn modify_by_address(address: usize) {
-    // TODO: Fill your safety notice of the code block below to match your
-    // code's behavior and the contract of this function. You may use the
-    // comment of the test below as your format reference.
+    // SAFETY: 遵循外层函数的安全契约——调用者已保证 `address` 是指向有效 `u32` 的可变地址，
+    // 因此将 `usize` 地址转换为 `*mut u32` 指针是安全的，且解引用后可修改目标值。
     unsafe {
-        todo!("Your code goes here")
+        // 1. 将 usize 地址转换为 *mut u32 可变原始指针
+        let ptr = address as *mut u32;
+        // 2. 解引用指针，修改目标内存的值为 0xAABBCCDD
+        *ptr = 0xAABBCCDD;
     }
 }
 
