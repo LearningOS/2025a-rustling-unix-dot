@@ -6,35 +6,61 @@
 //I AM NOT DONE
 use std::collections::VecDeque;
 
-// Define a graph
+// 无向图结构定义
 struct Graph {
-    adj: Vec<Vec<usize>>, 
+    adj: Vec<Vec<usize>>, // 邻接表：adj[src] 存储与src相连的所有节点
 }
 
 impl Graph {
-    // Create a new graph with n vertices
+    // 创建包含n个顶点的空图
     fn new(n: usize) -> Self {
         Graph {
             adj: vec![vec![]; n],
         }
     }
 
-    // Add an edge to the graph
+    // 向图中添加无向边（src <-> dest）
     fn add_edge(&mut self, src: usize, dest: usize) {
-        self.adj[src].push(dest); 
-        self.adj[dest].push(src); 
+        self.adj[src].push(dest);
+        self.adj[dest].push(src);
     }
 
-    // Perform a breadth-first search on the graph, return the order of visited nodes
+    // 执行广度优先搜索，返回节点访问顺序
     fn bfs_with_return(&self, start: usize) -> Vec<usize> {
-        
-		//TODO
+        // 边界检查：起始节点超出图的顶点范围
+        if start >= self.adj.len() {
+            return vec![];
+        }
 
+        // 初始化访问标记：false表示未访问，true表示已访问
+        let mut visited = vec![false; self.adj.len()];
+        // BFS核心队列：存储待访问的节点
+        let mut queue = VecDeque::new();
+        // 存储访问顺序的结果数组
         let mut visit_order = vec![];
+
+        // 起始节点入队并标记为已访问
+        visited[start] = true;
+        queue.push_back(start);
+
+        // 队列非空时循环处理
+        while let Some(current) = queue.pop_front() {
+            // 记录当前节点的访问顺序
+            visit_order.push(current);
+
+            // 遍历当前节点的所有邻接节点
+            for &neighbor in &self.adj[current] {
+                // 未访问过的邻接节点入队并标记
+                if !visited[neighbor] {
+                    visited[neighbor] = true;
+                    queue.push_back(neighbor);
+                }
+            }
+        }
+
         visit_order
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -84,4 +110,3 @@ mod tests {
         assert_eq!(visited_order, vec![0]);
     }
 }
-
