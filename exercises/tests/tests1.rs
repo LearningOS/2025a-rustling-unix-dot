@@ -1,6 +1,6 @@
 // tests1.rs
 //
-// Tests are important to ensure that your code does what you think it should
+// Tests are  important to ensure that your code does what you think it should
 // do. Tests can be run on this file with the following command: rustlings run
 // tests1
 //
